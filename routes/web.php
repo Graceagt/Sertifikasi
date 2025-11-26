@@ -8,7 +8,9 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserDashboardController;
 use Illuminate\Support\Facades\Route;
 
-
+Route::get('/', function () {
+    return redirect('/login');
+});
 // =======================
 // AUTH
 // =======================
