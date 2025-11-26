@@ -23,40 +23,35 @@ class BorrowingController extends Controller
         return view('borrowings.create', compact('books'));
     }
 
-    public function store(Request $request) {
-
-        // Pastikan data 'books' ada
-        if (!$request->has('books')) {
-            return back()->with('error', 'Tidak ada buku yang dipilih.');
-        }
-
-        // Buat record peminjaman
-        $borrowing = Borrowing::create([
-            'user_id' => Auth::id(),
-            'status' => 'DIPROSES'
+    public function store(Request $request)
+    {
+        $request->validate([
+            'checked_books' => 'required|array',
+            'quantity' => 'required|array',
         ]);
-
-        // Loop semua input buku
-        foreach ($request->books as $book_id => $quantity) {
-
-            // Lewati jika quantity kosong atau 0
-            if ($quantity == null || $quantity <= 0) {
-                continue;
-            }
-
-            BorrowingBook::create([
-                'borrowing_id' => $borrowing->id,
-                'book_id' => $book_id,
-                'quantity' => $quantity
-            ]);
-
-            // Kurangi stok buku
-            $book = Book::find($book_id);
+    
+        $user = auth()->user();
+    
+        // Buat data peminjaman baru
+        $borrowing = Borrowing::create([
+            'user_id' => $user->id,
+            'status' => 'DIPROSES',
+        ]);
+    
+        // Loop buku yang dipilih
+        foreach($request->checked_books as $bookId) {
+            $quantity = $request->quantity[$bookId] ?? 1;
+    
+            // Simpan ke pivot table
+            $borrowing->books()->attach($bookId, ['quantity' => $quantity]);
+    
+            // Opsional: Kurangi stok buku
+            $book = Book::find($bookId);
             $book->stock -= $quantity;
             $book->save();
         }
-
-        return redirect('/borrowings')
-            ->with('success', 'Peminjaman berhasil diajukan.');
+    
+        return redirect()->back()->with('success', 'Peminjaman berhasil diajukan.');
     }
+    
 }

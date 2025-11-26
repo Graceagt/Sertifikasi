@@ -40,15 +40,16 @@
                     <td class="px-6 py-3 text-sm text-gray-700">{{ $index + 1 }}</td>
                     <td class="px-6 py-3 text-sm text-gray-700">{{ $borrowing->user->name }}</td>
                     <td class="px-6 py-3 text-sm text-gray-700">
-                        @foreach($borrowing->books as $book)
-                            <span>{{ $book->title }}</span>@if(!$loop->last), @endif
-                        @endforeach
-                    </td>
+                    @foreach($borrow->books as $b)
+                    <li>{{ $b->title }} ({{ $b->pivot->quantity }})</li>
+                    @endforeach
                     <td class="px-6 py-3 text-sm text-gray-700">
-                        @foreach($borrowing->books as $book)
-                            <span>{{ $book->pivot->quantity }}</span>@if(!$loop->last), @endif
-                        @endforeach
-                    </td>
+    <ul class="list-disc pl-5">
+        @foreach($borrowing->books as $b)
+            <li>{{ $b->title }} ({{ $b->pivot->quantity }})</li>
+        @endforeach
+    </ul>
+</td>
                     <td class="px-6 py-3 text-sm text-gray-700">{{ $borrowing->created_at->format('d-m-Y') }}</td>
                     <td class="px-6 py-3 text-sm">
                         @if($borrowing->status == 'DIPROSES')

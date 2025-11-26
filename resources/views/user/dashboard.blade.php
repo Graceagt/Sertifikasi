@@ -7,15 +7,26 @@
 </head>
 <body class="bg-gray-100 min-h-screen">
 
-    <!-- Navbar -->
-    <nav class="bg-blue-600 text-white p-4 flex justify-between items-center">
-        <h1 class="text-xl font-bold">Perpustakaan Arcadia</h1>
-        <form action="{{ url('/logout') }}" method="POST">
-            @csrf
-            <button type="submit" class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded">Logout</button>
-        </form>
+    <!-- NAVBAR -->
+    <nav class="bg-blue-600 text-white shadow">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex-shrink-0 font-bold text-xl">Perpustakaan Arcadia</div>
+                <div class="flex space-x-4 items-center">
+                    <a href="{{ url('/user/dashboard') }}" class="px-3 py-2 rounded-md hover:bg-blue-500 transition">Dashboard</a>
+                    <a href="{{ url('/borrow') }}" class="px-3 py-2 rounded-md hover:bg-blue-500 transition">Pinjam Buku</a>
+                    <a href="{{ url('/borrowings') }}" class="px-3 py-2 rounded-md hover:bg-blue-500 transition">Riwayat Peminjaman</a>
+
+                    <form action="{{ route('logout') }}" method="POST" class="inline">
+                        @csrf
+                        <button type="submit" class="px-3 py-2 rounded-md hover:bg-blue-500 transition">Logout</button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </nav>
 
+    <!-- MAIN CONTENT -->
     <div class="container mx-auto mt-8">
 
         <h2 class="text-2xl font-bold mb-4">Selamat datang, {{ Auth::user()->name }}!</h2>

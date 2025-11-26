@@ -12,11 +12,12 @@ class Borrowing extends Model
     {
         return $this->belongsTo(User::class);
     }
-
+    
     public function books()
     {
-        return $this->belongsToMany(Book::class,'borrowing_books')
-                    ->withPivot('quantity');
+        return $this->belongsToMany(Book::class)->withPivot('quantity');
     }
+    
+    
 }
 

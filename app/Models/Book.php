@@ -13,8 +13,9 @@ class Book extends Model
     protected $fillable = ['title', 'author', 'stock'];
 
     public function borrowings()
-{
-    return $this->belongsToMany(Borrowing::class, 'borrowing_book', 'book_id', 'borrowing_id');
-}
-
+    {
+        return $this->belongsToMany(Borrowing::class)->withPivot('quantity');
+    }
+    
+    
 }

@@ -5,26 +5,26 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Borrowing;
 use App\Models\Book;
+use App\Models\User; 
 
 class AdminController extends Controller
 {
-      // Dashboard admin
-        public function index()
-        {
-            $books = Book::all(); // ambil semua buku
-            $borrowings = Borrowing::with('user', 'books')->get(); // opsional, kalau mau ditampilkan di dashboard juga
-    
-            return view('admin.dashboard', compact('books', 'borrowings'));
-        }
+    // Dashboard admin
+    public function index()
+    {
+        $books = Book::all();
+        $borrowings = Borrowing::with('user', 'books')->get();
+        return view('admin.dashboard', compact('books', 'borrowings'));
+    }
 
-    // Tambahkan ini:
+    // Halaman Daftar Peminjaman
     public function borrowings()
     {
-        // ambil semua peminjaman beserta data user dan buku
         $borrowings = Borrowing::with('user','books')->get();
         return view('admin.borrowings', compact('borrowings'));
     }
 
+    // Approve peminjaman
     public function approve($id)
     {
         $borrowing = Borrowing::findOrFail($id);
@@ -34,6 +34,7 @@ class AdminController extends Controller
         return redirect()->back()->with('success', 'Peminjaman disetujui.');
     }
 
+    // Reject peminjaman
     public function reject($id)
     {
         $borrowing = Borrowing::findOrFail($id);
@@ -43,6 +44,7 @@ class AdminController extends Controller
         return redirect()->back()->with('success', 'Peminjaman ditolak.');
     }
 
+    // Return peminjaman
     public function returnBook($id)
     {
         $borrowing = Borrowing::findOrFail($id);
@@ -81,5 +83,17 @@ class AdminController extends Controller
         return redirect()->back()->with('success','Buku berhasil diupdate.');
     }
 
-    
+    public function dashboard()
+    {
+        $totalBooks = Book::count();                // total buku
+        $totalUsers = User::where('role', 'user')->count(); // total peminjam (user biasa)
+        $totalBorrowings = Borrowing::count();      // total peminjaman
+        $pendingBorrowings = Borrowing::where('status', 'DIPROSES')->count(); // peminjaman diproses
+
+        $books = Book::all(); // data buku untuk tabel
+
+        return view('admin.dashboard', compact(
+            'totalBooks', 'totalUsers', 'totalBorrowings', 'pendingBorrowings', 'books'
+        ));
+    }
 }

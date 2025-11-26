@@ -7,13 +7,25 @@
 </head>
 <body class="bg-gray-100 min-h-screen">
 
-<!-- Navbar -->
-<nav class="bg-blue-600 text-white p-4 flex justify-between items-center">
-    <h1 class="text-xl font-bold">Admin - Perpustakaan Arcadia</h1>
-    <form action="{{ url('/logout') }}" method="POST">
-        @csrf
-        <button type="submit" class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded">Logout</button>
-    </form>
+<!-- Navbar Admin -->
+<nav class="bg-blue-600 text-white shadow">
+    <div class="max-w-6xl mx-auto px-4">
+        <div class="flex justify-between items-center h-16">
+            <div class="flex-shrink-0 font-bold text-xl">Admin - Perpustakaan Arcadia</div>
+            <div class="flex space-x-4 items-center">
+                <a href="{{ route('admin.dashboard') }}" 
+                   class="px-3 py-2 rounded-md hover:bg-blue-500 transition">Dashboard</a>
+                <a href="{{ route('admin.borrowings.index') }}" 
+                   class="px-3 py-2 rounded-md hover:bg-blue-500 transition">Daftar Peminjaman</a>
+
+                <!-- Logout -->
+                <form action="{{ route('logout') }}" method="POST" class="inline">
+                    @csrf
+                    <button type="submit" class="px-3 py-2 rounded-md hover:bg-blue-500 transition">Logout</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </nav>
 
 <div class="container mx-auto mt-8">
@@ -37,14 +49,6 @@
         </script>
     @endif
 
-    <div class="flex gap-4 mb-6">
-        <a href="{{ route('admin.dashboard') }}" 
-           class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">Dashboard</a>
-        
-        <a href="{{ route('admin.borrowings.index') }}" 
-           class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">Daftar Peminjaman</a>
-    </div>
-    
 
     <!-- Form Tambah Buku -->
     <div class="bg-white p-6 rounded shadow mb-6">
@@ -79,7 +83,6 @@
                         <td class="px-4 py-2">{{ $book->author }}</td>
                         <td class="px-4 py-2">{{ $book->stock }}</td>
                         <td class="px-4 py-2 flex gap-2">
-                            <!-- Tombol Edit buka modal -->
                             <button onclick="openModal({{ $book->id }}, '{{ $book->title }}', '{{ $book->author }}', {{ $book->stock }})"
                                     class="bg-yellow-400 hover:bg-yellow-500 text-white px-2 py-1 rounded">
                                 Edit
@@ -92,7 +95,6 @@
     </div>
 
 </div>
-
 
 <!-- Modal Edit Buku -->
 <div id="editModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
@@ -111,7 +113,6 @@
         </form>
     </div>
 </div>
-
 
 <script>
 function openModal(id, title, author, stock){

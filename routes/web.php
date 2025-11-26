@@ -25,6 +25,7 @@ Route::post('/logout',[AuthController::class,'logout']);
 Route::middleware(['auth','admin'])->group(function(){
     // Dashboard admin
     Route::get('/admin/dashboard',[AdminController::class,'index'])->name('admin.dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Daftar peminjaman
     Route::get('/admin/borrowings', [AdminController::class,'borrowings'])->name('admin.borrowings.index');
@@ -58,3 +59,5 @@ Route::middleware(['auth','admin'])->group(function(){
 // =======================
 Route::middleware('auth')->get('/dashboard', [DashboardController::class, 'index']);
 
+// Logout route
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
